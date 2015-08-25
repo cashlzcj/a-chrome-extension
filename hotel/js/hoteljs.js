@@ -19,5 +19,4 @@
         //    console.log(response.farewell);
         //});
     }
-
 })();

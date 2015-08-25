@@ -16,7 +16,10 @@
 //    });
 
 window.addEventListener ("load", run_automatic, false);
-
+//window作用域下覆盖alert的方法
+//window.alert = function(str){
+//    console.log(str);
+//}
 
 //window.onbeforeunload = function(event){
 //    // 关闭
@@ -105,6 +108,7 @@ function clearTimerout(timer){
         timerOut = null;
     }
 }
+
 
 //function begin(item, callback){
 //    //console.log(item);

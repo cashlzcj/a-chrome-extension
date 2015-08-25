@@ -14,7 +14,7 @@
   "content_scripts":[{
 		"matches":["http://mangocity.fangcang.com/HPMS/taobaoRoomAndProduction!index.shtml"],
 		"js":["js/jquery-2.1.4.min.js", "js/content_script.js", "js/async.js"],
-        "run_at": "document_end"//,
+        "run_at": "document_start"//,
 //        "all_frames" : true
   }]
 }
