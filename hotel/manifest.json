@@ -2,8 +2,8 @@
 {
   "name": "hotel automatic",
   "manifest_version": 2,
-  "version": "0.1.0",
-  "description": "自动上架酒店",
+  "version": "0.1.1",
+  "description": "自动上架酒店,加入检查配额功能",
   "background": { "scripts": ["js/background.js"] },
   "permissions": ["tabs"],
   "page_action": { // browser_action

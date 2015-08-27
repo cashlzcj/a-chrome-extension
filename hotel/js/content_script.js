@@ -41,9 +41,7 @@ function begin(array, index){
         localStorage.total = Number(localStorage.total) + array.length;
         if($("a.next")[0]){
             $("a.next")[0].click();
-            timerOut = setTimeout(function(){
-                location.reload();
-            },4000);
+            reloadAfter(4);
         }
         else{
             // 结束了
@@ -55,17 +53,19 @@ function begin(array, index){
     }
 
     array[index].checked = true;
+
     getRoomDetail(function (brs) {
+        sessionStorage.currentIndex = index + 1;
         if (brs) {
             $("#id_batch_set_onsale").click();
+            timerOut = setTimeout(function () {
+                putaway(array, index);
+            }, 2000);
         }
         else {
             console.log("这个房型没有配额");
+            reloadAfter(2);
         }
-
-        timerOut = setTimeout(function () {
-            putaway(array, index);
-        }, 2000);
     });
 }
 
@@ -74,7 +74,6 @@ function putaway(array, index){
     clearTimerout(timerOut);
     //$(".mlr")[0].click();
     putawayRequest();
-    sessionStorage.currentIndex = index + 1;
 
     // 10秒后进入下一轮
     //timerOut = setTimeout(function(){
@@ -105,11 +104,15 @@ function putawayRequest(){
             success:function(result)
             {
                 $('#popup_exit')[0].click();
-                timerOut = setTimeout(function(){
-                    location.reload();
-                }, 1000);
+                reloadAfter(1);
             }
         });
+}
+
+function reloadAfter(second){
+    timerOut = setTimeout(function(){
+        location.reload();
+    }, second * 1000);
 }
 
 // 获取房间数据
