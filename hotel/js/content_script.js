@@ -17,11 +17,13 @@ function run_automatic (evt) {
                 cunrrentIndex = 0;
                 localStorage.lastBeginTime =localStorage.beginTime;
                 localStorage.lastTotal = localStorage.total;
+                localStorage.lastSuccessTotal = localStorage.successTotal;
                 localStorage.lastEndTime = localStorage.endTime;
 
                 localStorage.beginTime = new Date();
                 localStorage.total = 0;
                 localStorage.endTime = 0;
+                localStorage.successTotal = 0;
             }
 
             //console.log("cunrrentIndex",cunrrentIndex);
@@ -38,7 +40,7 @@ function begin(array, index){
         console.log("array count", array.length);
         console.log("index", index+1);
         sessionStorage.currentIndex = 0;
-        localStorage.total = Number(localStorage.total) + array.length;
+        //localStorage.total = Number(localStorage.total) + array.length;
         if($("a.next")[0]){
             $("a.next")[0].click();
             reloadAfter(4);
@@ -46,13 +48,17 @@ function begin(array, index){
         else{
             // 结束了
             localStorage.endTime = new Date();
-            var result = "开始时间:"+localStorage.beginTime+"\n"+"结束时间:"+localStorage.endTime+"\n"+"共点击了"+localStorage.total+"个房型";
+            var result = "开始时间:" + localStorage.beginTime+"\n" + "结束时间:"+localStorage.endTime + "\n"+"共点击了"
+                +localStorage.total+"个房型" + "\n" + "共成功上架了"+localStorage.successTotal+"个房型";
             alert(result);
         }
         return;
     }
 
     array[index].checked = true;
+
+    localStorage.total = Number(localStorage.total) + 1;
+    localStorage.successTotal = Number(localStorage.successTotal) + 1;
 
     getRoomDetail(function (brs) {
         sessionStorage.currentIndex = index + 1;
@@ -64,6 +70,7 @@ function begin(array, index){
         }
         else {
             console.log("这个房型没有配额");
+            localStorage.successTotal = Number(localStorage.successTotal) - 1;
             reloadAfter(2);
         }
     });
@@ -104,7 +111,7 @@ function putawayRequest(){
             success:function(result)
             {
                 $('#popup_exit')[0].click();
-                reloadAfter(1);
+                reloadAfter(3);
             }
         });
 }
@@ -128,7 +135,7 @@ function getRoomDetail(callback){
         target:"#dayPriceDetailResult",
         contentType: "application/x-www-form-urlencoded; charset=utf-8",
         success:function(result){
-            callback(verifyRoomQuota($.makeArray($("#commodityQuotaList tr", $('<div>').append(result)))));
+            callback(verifyRoomQuota($.makeArray($(".tb1 tr", $('<div>').append(result)))));
         },
         error:function(result){
             callback(false);
@@ -137,8 +144,9 @@ function getRoomDetail(callback){
 }
 
 function verifyRoomQuota(quotas){
-    for(var i=0; i<quotas.length; ++i){
-        var text = $("td:eq(6)", $(quotas[i])).text();
+    //console.log(quotas);
+    for(var i=1; i<quotas.length; ++i){
+        var text = $("td:eq(5)", $(quotas[i])).text();
         // 如果发现一个有存量的说明可以上
         if(verifyNum(text.replace(/\n|\s/g, ''))){
            return true;
@@ -149,6 +157,7 @@ function verifyRoomQuota(quotas){
 }
 
 function verifyNum(str){
+    //console.log("num", str);
     var array = str.split("/");
     for(var i=0; i<array.length; ++i){
         if(parseInt(array[i]) > 0){
