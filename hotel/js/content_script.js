@@ -159,12 +159,20 @@ function verifyRoomQuota(quotas){
 function verifyNum(str){
     //console.log("num", str);
     var array = str.split("/");
+    if(array.length < 2){
+        return false;
+    }
+
+    if(parseInt(array[1]) > 0){
+        return true;
+    }
+    /*
     for(var i=0; i<array.length; ++i){
         if(parseInt(array[i]) > 0){
             //console.log(parseInt(array[i]));
             return true;
         }
-    }
+    }*/
 
     return false;
 }
